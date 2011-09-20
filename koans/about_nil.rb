@@ -33,6 +33,7 @@ class AboutNil < EdgeCase::Koan
     # or
     #    obj == nil
     # Why?
+    # answer: obj.nil? is more expressive
   end
 
 end
