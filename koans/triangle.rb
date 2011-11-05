@@ -19,11 +19,23 @@ def triangle(a, b, c)
   #sides.each do |side|
   #  print side
   #end
+  
+  s1 = sides[0];
+  s2 = sides[1];
+  s3 = sides[2];
 
-  if (sides[0]==sides[1] && sides[1]==sides[2])
+  if (s1 <= 0)
+    raise TriangleError
+  end
+  
+  if (s1+s2 <= s3)
+    raise TriangleError
+  end
+
+  if (s1==s2 && s2==s3)
     :equilateral
   else
-    if (sides[0]!=sides[1] && sides[1]!=sides[2])
+    if (s1!=s2 && s2!=s3)
       :scalene
     else
       :isosceles
