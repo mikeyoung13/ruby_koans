@@ -34,16 +34,18 @@ def score(dice)
   score = 0
   diceCounts = []
   
-  # get cou
+  # get counts for each of 6 dice faces
   (1..6).each do |item|
     diceCounts[item] = dice.count(item)
   end
   
+  # special score for tripple 1s
   if diceCounts[1] >= 3
     score += 1000
     diceCounts[1]-=3
   end
   
+  # tripples (other than 1)
   (2..6).each do |item|
     if diceCounts[item] >= 3
       score += 100*item
@@ -51,6 +53,7 @@ def score(dice)
     end
   end
   
+  # score remaining dice
   score += diceCounts[1]*100
   score += diceCounts[5]*50
   
