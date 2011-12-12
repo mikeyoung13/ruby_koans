@@ -24,11 +24,10 @@ class Proxy
   end
 
   def method_missing(meth, *args, &block)
-    
-    @methodCallCount[meth]+=1
-    
+
     if [:channel=, :channel,:power,:on?,:upcase!,:split].include?(meth)
       @methodCallList << meth
+      @methodCallCount[meth]+=1
       @object.send(meth, *args)
     elsif meth == :messages
       @methodCallList
@@ -42,7 +41,6 @@ class Proxy
 
   end
 
-  # WRITE CODE HERE
 end
 
 # The proxy object should pass the following Koan:
