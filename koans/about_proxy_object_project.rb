@@ -24,38 +24,22 @@ class Proxy
   end
 
   def method_missing(meth, *args, &block)
+    
     @methodCallCount[meth]+=1
-
-    if meth == :channel=
-      addMessage meth
-      @object.send(meth, args[0])
-    elsif meth == :channel
-      @object.send(meth)
-    elsif meth == :power
-      addMessage meth
-      @object.send(meth)
-    elsif meth == :on?
-      @object.send(meth)
+    
+    if [:channel=, :channel,:power,:on?,:upcase!,:split].include?(meth)
+      @methodCallList << meth
+      @object.send(meth, *args)
     elsif meth == :messages
       @methodCallList
     elsif meth == :called?
       @methodCallList.include?(args[0])
     elsif meth == :number_of_times_called
       @methodCallCount[args[0]]
-    elsif meth == :upcase!
-      addMessage meth
-      @object.send(meth)
-    elsif meth == :split
-      addMessage meth
-      @object.send(meth)  
     else 
       super
     end
 
-  end
-  
-  def addMessage (meth)
-    @methodCallList << meth
   end
 
   # WRITE CODE HERE
