@@ -13,9 +13,59 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 # of the Proxy class is given in the AboutProxyObjectProject koan.
 
 class Proxy
+
+  #attr_accessor :channel
+
   def initialize(target_object)
     @object = target_object
     # ADD MORE CODE HERE
+    @methodsCalled = Array.new
+    @methodCount = Hash.new(0)
+  end
+
+  def method_missing(meth, *args, &block)
+    puts "*******************"
+    @methodCount[meth]+=1
+
+    if meth == :channel=
+      puts "******channel=********"
+      addMessage meth
+      @channel = args[0]
+    elsif meth == :channel
+      puts "******channel********"
+      @channel    
+    elsif meth == :power
+      addMessage meth
+      puts "******power********"
+      @power = true
+    elsif meth == :on?
+      puts "******on?********"
+      @power
+    elsif meth == :messages
+      puts "******messages********"
+      @methodsCalled
+    elsif meth == :called?
+      puts "******called?********"
+      @methodsCalled.include?(args[0])
+    elsif meth == :number_of_times_called
+      puts "******number_of_times_called?********"
+      @methodCount[args[0]]
+    elsif meth == :upcase!
+      puts "******upcase!********"
+      addMessage meth
+      @object.send(:upcase!)
+    elsif meth == :split
+      puts "******split********"
+      addMessage meth
+      @object.send(:split)  
+    else 
+      super
+    end
+
+  end
+  
+  def addMessage (meth)
+    @methodsCalled << meth
   end
 
   # WRITE CODE HERE
