@@ -18,27 +18,24 @@ class Proxy
 
   def initialize(target_object)
     @object = target_object
-    # ADD MORE CODE HERE
-    @methodCallList = Array.new
-    @methodCallCount = Hash.new(0)
+    @methodCalls = Hash.new(0)
   end
 
   def method_missing(meth, *args, &block)
-
-    if [:channel=, :channel,:power,:on?,:upcase!,:split].include?(meth)
-      @methodCallList << meth
-      @methodCallCount[meth]+=1
-      @object.send(meth, *args)
-    elsif meth == :messages
-      @methodCallList
-    elsif meth == :called?
-      @methodCallList.include?(args[0])
-    elsif meth == :number_of_times_called
-      @methodCallCount[args[0]]
-    else 
-      super
-    end
-
+    @methodCalls[meth]+=1
+    @object.send(meth, *args, &block)
+  end
+  
+  def messages
+    @methodCalls.keys
+  end
+  
+  def called?(methodName)
+    @methodCalls.include?(methodName)
+  end
+  
+  def number_of_times_called(methodName)
+    @methodCalls[methodName]
   end
 
 end
