@@ -19,45 +19,35 @@ class Proxy
   def initialize(target_object)
     @object = target_object
     # ADD MORE CODE HERE
-    @methodsCalled = Array.new
-    @methodCount = Hash.new(0)
+    @methodCallList = Array.new
+    @methodCallCount = Hash.new(0)
   end
 
   def method_missing(meth, *args, &block)
-    puts "*******************"
-    @methodCount[meth]+=1
+    @methodCallCount[meth]+=1
 
     if meth == :channel=
-      puts "******channel=********"
       addMessage meth
-      @channel = args[0]
+      @object.send(meth, args[0])
     elsif meth == :channel
-      puts "******channel********"
-      @channel    
+      @object.send(meth)
     elsif meth == :power
       addMessage meth
-      puts "******power********"
-      @power = true
+      @object.send(meth)
     elsif meth == :on?
-      puts "******on?********"
-      @power
+      @object.send(meth)
     elsif meth == :messages
-      puts "******messages********"
-      @methodsCalled
+      @methodCallList
     elsif meth == :called?
-      puts "******called?********"
-      @methodsCalled.include?(args[0])
+      @methodCallList.include?(args[0])
     elsif meth == :number_of_times_called
-      puts "******number_of_times_called?********"
-      @methodCount[args[0]]
+      @methodCallCount[args[0]]
     elsif meth == :upcase!
-      puts "******upcase!********"
       addMessage meth
-      @object.send(:upcase!)
+      @object.send(meth)
     elsif meth == :split
-      puts "******split********"
       addMessage meth
-      @object.send(:split)  
+      @object.send(meth)  
     else 
       super
     end
@@ -65,7 +55,7 @@ class Proxy
   end
   
   def addMessage (meth)
-    @methodsCalled << meth
+    @methodCallList << meth
   end
 
   # WRITE CODE HERE
